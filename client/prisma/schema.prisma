@@ -12,11 +12,25 @@ enum UserType {
   GOOGLE
 }
 
+// User model
 model User {
-  id            String        @id @default(cuid())
+  id            String        @id @default(uuid()) // UUID as default
   name          String       
   email         String        @unique
   password      String?       
-  image         String        @default("/default.jpg")
+  image         String        @default("/default.jpg") // Default image
   type          UserType      
+  taskHistories TaskHistory[]
+}
+
+// TaskHistory model
+model TaskHistory {
+  id          Int       @id @default(autoincrement())
+  task        String
+  dateStarted DateTime
+  dateEnded   DateTime? 
+  timeSpent   String?  
+  wasStopped  Boolean  @default(false) 
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
 }
